@@ -1,0 +1,43 @@
+ {% extends 'base.html' %}
+  {% block content %}
+    <!-- Page Content -->
+
+    <div class="container">
+
+        <div class="row">
+
+            {% include "accountbase.html" %}
+
+            <div class="col-md-9 col-sm-8">
+                <h1 class="page-header">Sidebar Page
+                    <small>For Deeper Customization</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="main_site/index.html">Home</a>
+                    </li>
+                    <li class="active">Full Width Page</li>
+                </ol>
+                {% for item in grouped_products %}
+                    {% if forloop.first %}<div class="row">{% endif %}
+                                <div class="col-md-3 portfolio-item">
+                                    <a href="/products/{{ item.category.slug }}/{{ item.slug }}">
+                                    <img class="img-responsive" src="/media/{{ item.photo_set.first }}">
+
+                                </a>
+                            </div>
+                       {% if forloop.counter|divisibleby:4 %}</div><div class="row">{% endif %}
+                    {% if forloop.last %}</div>{% endif %}
+
+                {% endfor %}
+                        <hr>
+
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+{% endblock %}

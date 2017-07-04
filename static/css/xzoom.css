@@ -1,0 +1,200 @@
+/* Compatibility styles for frameworks like bootstrap, foundation e.t.c */
+.xzoom-source img, .xzoom-preview img, .xzoom-lens img {
+  display: block;
+  max-width: none;
+  max-height: none;
+}
+/* --------------- */
+
+/* xZoom Styles below */
+.xzoom-container { 
+  display: inline-block; 
+}
+
+.xzoom-thumbs {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.xzoom { 
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);  
+  margin-bottom: 15px; 
+}
+.xzoom2, .xzoom3, .xzoom4, .xzoom5 {
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);  
+  margin-bottom: 15px;  
+}
+
+/* Thumbs */
+.xzoom-gallery, .xzoom-gallery2, .xzoom-gallery3, .xzoom-gallery4, .xzoom-gallery5 { 
+  border: 1px solid #cecece; 
+  margin-left: 5px;
+  margin-bottom: 10px;
+}
+
+.xzoom-source, .xzoom-hidden {
+  display: block;
+  position: static;
+  float: none;
+  clear: both;
+}
+
+/* Everything out of border is hidden */
+.xzoom-hidden {
+  overflow: hidden;
+}
+
+/* Preview */
+.xzoom-preview {
+  border: 1px solid #888;
+  background: #2f4f4f;
+  box-shadow: -0px -0px 10px rgba(0,0,0,0.50);
+}
+
+/* Lens */
+.xzoom-lens {
+  border: 1px solid #555;
+  box-shadow: -0px -0px 10px rgba(0,0,0,0.50);
+  cursor: crosshair;
+}
+
+/* Loading */
+.xzoom-loading {
+  background-position: center center;
+  background-repeat: no-repeat;
+  border-radius: 100%;
+  opacity: .7;
+  background: url(../images/xloading.gif);
+  width: 48px;
+  height: 48px;
+}
+
+/* Additional class that applied to thumb when it is active */
+.xactive {  
+  -webkit-box-shadow: 0px 0px 3px 0px rgba(74,169,210,1);
+  -moz-box-shadow: 0px 0px 3px 0px rgba(74,169,210,1);
+  box-shadow: 0px 0px 3px 0px rgba(74,169,210,1); 
+  border: 1px solid #4aaad2;
+}
+
+/* Caption */
+.xzoom-caption {
+  position: absolute;
+  bottom: -43px;
+  left: 0;
+  background: #000;
+  width: 100%;
+  text-align: left;
+}
+
+.xzoom-caption span {
+  color: #fff;
+  font-family: Arial, sans-serif;
+  display: block;
+  font-size: 0.75em;
+  font-weight: bold;
+  padding: 10px;
+}
+.col-md-1 select {
+  max-width: 50px;
+}
+.avail-success{
+  color: #008a00 !important;
+  font-size: 1.5em;
+}
+.notavail{
+  color: #8A0416 !important;
+  font-size: 1.5em;
+}
+.price-cart{
+  font-size: 2em;
+}
+.cart-hr {
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #ffffff;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.cart-prod-name{
+  margin-top: 5px;
+}
+.productDescription {
+    color: #333333;
+    word-wrap: break-word;
+    font-size: small;
+    line-height: initial;
+    margin: 0.5em 0px 0em 25px;
+}
+	.products-list{
+		margin-bottom:15px;
+	}
+		.product-head{
+			padding: 14px 20px;
+			margin:0 0 20px;
+			font-size:24px;
+			background:#ffb400;
+			color:#fff;
+			text-transform:uppercase;
+		}
+		.product-col{
+			margin-bottom:20px;
+			background:#fff;
+		}
+		.product-col.list .image{
+			padding:20px 30px 10px 0;
+			float:left;
+		}
+		.product-col .caption{
+			padding: 20px 0;
+		}
+			.product-col h4{
+				font-size:16px;
+				text-transform:uppercase;
+			}
+			.product-col h4, .product-col h4 a{
+				color:#252a2f;
+			}
+			.product-col .description{
+				padding:5px 0;
+				color:#8b8b8b;
+				font-size:12px;
+				line-height:18px;
+				text-align:justify;
+			}
+			.product-col.list .description{
+				padding-right:20px;
+			}
+			.product-col .price{
+				padding:10px 0;
+                font-size: 1em;
+			}
+				.product-col .price .price-tax{
+					font-size:14px;
+					color:#2f353b;
+					text-transform:uppercase;
+				}
+				.product-col .price span.price-new{
+					color:#2f353b;
+					font-size:24px;
+					padding-right:5px;
+				}
+				.product-col .price span.price-old{
+					font-size:18px;
+					color:#808080;
+					text-decoration:line-through;
+				}
+			.product-col .cart-button{
+				padding-top:10px;
+			}
+				.product-col .cart-button .btn{
+                    margin-top: 10px;
+                    padding-top:5px;
+                    float: right;
+				}
+                .product-col select{
+                  max-width: 50px;
+                }

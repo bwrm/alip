@@ -1,0 +1,24 @@
+                <div class="col-md-3 col-sm-4 sidebar">
+                <ul class="nav nav-stacked nav-pills">
+{#                    <li><a href="/myaccount">MyAccount's Home</a></li>#}
+                    <li><a href="{% url 'autoriz:myaccount-home' %}">Profile</a></li>
+{#                    <li><a href="{% url 'autoriz:add-service' %}">Add service</a></li>#}
+
+                {% if user.is_designer %}
+                    <li><a href="{% url 'main_site:product-add' %}">Add product</a></li>
+                    <li><a href="{% url 'autoriz:users-products' %}">All my products</a></li>
+                {% endif %}
+                    <li><a href="{% url 'orders:my_orders' %}">My orders</a></li>
+                {% if prod_id %}
+                    <li><a href="{% url 'upload:photo_upload' %}">Add Photo</a></li>
+                    <li><a href="{% url 'upload:files_upload' %}">Add File</a></li>
+                {% endif %}
+                        {% if  user.is_producer %}
+                                <li><a href="#">Producer deals</a></li>
+                                <li><a href="#">Producer Settings</a></li>
+                                <li><a href="{% url 'autoriz:produced-products' %}">Producing by me</a></li>
+                        {% else %}
+                             <li><a href="{% url 'autoriz:become-producer' %}">Become Producer</a></li>
+                        {% endif %}
+                </ul>
+            </div>

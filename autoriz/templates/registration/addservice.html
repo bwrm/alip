@@ -1,0 +1,48 @@
+ {% extends 'base.html' %}
+{% block title %}
+<title>Become designer</title>
+{% endblock %}
+{% block doplinks %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+{% endblock %}
+  {% block content %}
+    <!-- Page Content -->
+
+    <div class="container">
+
+        <div class="row">
+
+            {% include "accountbase.html" %}
+
+            <div class="col-md-9 col-sm-8">
+                <h1 class="page-header">Sidebar Page
+                    <small>For Deeper Customization</small>
+                                    </h1>
+                <ol class="breadcrumb">
+                    <li><a href="main_site/index.html">Home</a>
+                    </li>
+                    <li class="active">Full Width Page</li>
+                </ol>
+                <div class="panel panel-default">
+                <form action="" method="GET" class="form-horizontal">
+                    <div class="control-group">
+                    {% csrf_token %}
+                    {{ form }}
+
+                     </div>
+                    <button type="submit" value="update" class="btn btn-primary btn-large">Update</button>
+                </form>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+{% endblock %}

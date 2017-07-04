@@ -1,0 +1,217 @@
+  {% extends 'base.html' %}
+{% load i18n %}
+     {% block doplinks %}
+    {% load staticfiles %}
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "css/xzoom.css"%}" media="all" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/magnific-popup.css"%}" media="all" />
+    <script type="text/javascript" src="{% static "js/magnific-popup.js"%}"></script>
+    <script type="text/javascript" src="{% static "js/xzoom.min.js"%}"></script>
+<link href="{% static "css/jquery-ui.css"%}" rel="stylesheet">
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#dialog" ).dialog({
+      autoOpen: false,
+      width: '90%',
+      modal: true,
+    });
+
+    $( "#opener" ).on( "click", function() {
+      $( "#dialog" ).dialog( "open" );
+    });
+  } );
+  </script>
+{% endblock %}
+  {% block content %}
+
+     <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{ product.name }}
+                    <small>Explain Your Work</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/">Home</a>
+                    </li>
+                    <li class="active"><a href="/products/{{ product.category.slug }}/"> {{ product.category }}</a></li>
+                    <li class="active">{{ product.name }}</li>
+                </ol>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class="xzoom-container">
+          <img class="xzoom5" id="xzoom-magnific" style="height: 320px; width: 300px;" src="http://placehold.it/350x300" xoriginal="http://placehold.it/350x300" />
+          <div class="xzoom-thumbs">
+              {% for im in product.photo_set.all %}
+            <a href="/media/{{ im }}"><img class="xzoom-gallery5" width="45" src="/media/{{ im }}"  xpreview="/media/{{ im }}" title="The description goes here"></a>
+              {% endfor %}
+          </div>
+        </div>
+            </div>
+<script src="{% static "js/setup.js"%}"></script>
+            <div class="col-md-6">
+                    <a href="">{{ product.designer }}</a>
+                <h3 class="cart-prod-name">{% blocktrans %}{{ product.name }}{% endblocktrans %}</h3>
+                {% for i in ""|rjust:product.average_rating %}
+                    <i class="glyphicon glyphicon-star" style="color:orange"></i>
+                {% endfor %}
+                {% if product.reviews_count %}
+                    {{ product.average_rating }}
+                    <a href="#customerReviews">{{ product.reviews_count }} reviews</a>
+                {% else %}
+                    No reviews
+                {% endif %}
+                {% if user.is_authenticated %}
+                    <a href={% url 'review:create' product.slug  %} class="pull-right">Add review</a>
+                {% endif %}
+                <hr class="cart-hr">
+                <div class="price-cart">
+                    {{ product.price }}
+                </div>
+                {% if product.available %}
+                    <div class="avail-success">
+                        In Stock
+                    </div>
+                {% else %}
+                    Not Available
+                {% endif %}
+                <h3>Project Details</h3>
+                <ul>
+                    <li>Lorem Ipsum</li>
+                    <li>Dolor Sit Amet</li>
+                    <li>Consectetur</li>
+                    <li>Adipiscing Elit</li>
+                </ul>
+
+            </div>
+
+                    <div class="col-md-2" style="border:1px solid #e8e8e8; border-radius: 5px">
+                        {% if user.is_authenticated %}
+                        {% if user.is_superuser or product.designer == user %}
+                        <div class="row">
+                            <div class="col-md-1 pull-left" style="margin-left: 6px">
+                                <form action="{% url 'main_site:product-update' product.id %}" method="get">
+                                    <input type="hidden" name="category" value="{{ product.category.slug }}">
+                                    <input type="hidden" name="product" value="{{ product.slug }}">
+                                    <button type="submit" class="btn btn-link">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </button>
+                                    {% csrf_token %}
+                                </form>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% endif %}
+                        <div class="product-col">
+						<div class="image">
+							<img src="/media/{{ product.photo_set.first }}" alt="product" class="img-responsive">
+						</div>
+						<div class="caption">
+							<h4>
+								<a href="">Simply Organic Seeds</a>
+							</h4>
+							<div class="description">
+								We are so lucky living in such a wonderful time. Our almost unlimited ...
+							</div>
+							<div class="price">
+								<span class="price-new" id="fullprice">$199.50</span>
+							</div>
+							<div class="cart-button button-group">
+                                <form action="{% url "cart:cart_add" product.id %}" method="post">
+                                        {%  csrf_token %}
+                                        {{ cart_form }}
+                                    {% if count_producers > 1 %}
+                                    <button type="button" class="btn btn-primary" id="opener">
+{#                                    TODO: calculate price only for user, for cart calculate in cart #}
+                                        <i class="glyphicon glyphicon-shopping-cart">{{ minprice }}-{{ maxprice }}</i>
+                                    </button>
+                                    {% elif count_producers == 1 %}
+
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="glyphicon glyphicon-shopping-cart">to Cart</i>
+                                    </button>
+                                    {% else %}
+                                    We have no producers yet
+                                    {% endif %}
+                                </form>
+							</div>
+						</div>
+					</div>
+                     <div id="dialog" title="Show on map">
+                      <form>
+                        <fieldset>
+                            producer's info
+                          <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+                        </fieldset>
+                      </form>
+                    </div>
+                     {% if user.is_producer and not alredy_produce  %}
+                                <form action="{% url 'main_site:product-produce' product.id %}">
+                                    <button type="submit" class="btn btn-link">
+                                        <span class="glyphicon glyphicon-wrench"></span>
+                                        Can produce it
+                                    </button>
+                                </form>
+                                {% csrf_token %}
+                            {% endif %}
+                     {% if user.is_producer and alredy_produce  %}
+                         You can <a href="{% url 'main_site:product-produce-set' product.id %}">setting</a> produce iformation
+                         You are produce it product. If not,
+                         <a href="{% url 'main_site:cancel-produce' product.pk %}">cancel</a>.
+                     {% endif %}
+                    </div>
+            </div>
+     <div class="row">
+         <h3>Product Description</h3>
+         <div class="productDescription"> {{ product.description }}</div>
+     </div>
+
+     <div class="row">
+     {% if product.reviews_count %}
+        <a href="#" id="customerReviews"></a>
+         <h3>{{ product.name }} comments</h3>
+         <div class="productDescription">
+             {% for review in product.review_set.all|slice:":5" %}
+                <h3>{{ review.title }}</h3>
+                {{ review.review }}<br>
+                {% for i in ""|rjust:review.rating %}
+                    <i class="glyphicon glyphicon-star" style="color:orange"></i>
+                {% endfor %} {{ review.rating }}<br>
+             {% endfor %}
+         <br>
+         </div>
+     <a class="strong-link" href="{% url 'review:list' product.slug  %}"> All verified purchase reviews (newest first)</a>
+     {% else %}
+     <h3>{% trans "No comments yet" %}</h3>
+     {% endif %}
+     </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="page-header">{% trans "Related Projects" %}</h3>
+            </div>
+            {% for prod in related %}
+            <div class="col-sm-3 col-xs-6">
+                <a href="/products/{{ prod.category.slug }}/{{ prod.slug }}">
+                    <img class="img-responsive img-customer" src="/media/{{ prod.photo_set.first }}" >
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+  <script>
+  {% if count_producers == 1 %}
+      var fullprice = {{ endprice }};
+{#      $("#id_price").attr('value', fullprice);#}
+      $("#fullprice").text(fullprice);
+
+  {% endif %}
+  </script>
+  {% endblock %}

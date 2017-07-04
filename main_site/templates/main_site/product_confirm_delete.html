@@ -1,0 +1,24 @@
+  {% extends 'base.html' %}
+
+{% load staticfiles %}
+{% block doplinks %}
+<link href="{% static "css/custom_style.css" %}" rel="stylesheet">
+{% endblock %}
+ {% block content %}
+        <div class="container">
+
+        <div class="row">
+            <div class="form-box">
+                <div class="col-md-14">
+                    <span style="margin-left: 300px; margin-bottom: 300px"
+                <form action="" method="post">
+                    <p>Are you sure you want to delete "{{ object }}"?</p>
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Confirm</button>
+                </form>
+            </div>
+        </div>
+        </div>
+     </div>
+  {% endblock %}
+

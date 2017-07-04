@@ -1,0 +1,80 @@
+  {% extends 'base.html' %}
+{% block title %}
+products title
+{% endblock %}
+{% block doplinks %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+{% endblock %}
+  {% block content %}
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Four Column Portfolio
+                    <small>Showcase Your Work</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/">Home</a>
+                    </li>
+                    <li class="active">Map</li>
+                </ol>
+                <div id='map' style='height: 400px;'></div>
+                <script>
+                    	var map = L.map('map').setView([53.9022, 27.5619], 6);
+                        map.addControl(new L.Control.Fullscreen());
+                            L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?access_token={accessToken}', {
+                                maxZoom: 18,
+                                accessToken: 'pk.eyJ1IjoiZG9rb3RvcmciLCJhIjoiY2owdzZjOGQ4MDAwczMybzFqNWVxMHlqYiJ9.Qx89TnzjptZTIPqtkoPzbw',
+                            }).addTo(map);
+                            var markerGroup = L.layerGroup().addTo(map);
+          function WhereIAm(lat,lng, somedata, clean) {
+                    map.setZoom(13);
+                    map.panTo(new L.LatLng(lat,lng));
+                    if(clean == true) {
+                        markerGroup.clearLayers();
+                    }
+                    var mark = new L.marker(new L.LatLng(lat,lng)).addTo(markerGroup).bindPopup(somedata);
+                    mark.on('mouseover', function (e) {
+                        this.openPopup();
+                    });
+                    mark.on('mouseout', function (e) {
+                        this.closePopup();
+                    });
+          }
+
+          {% for producer in producer_list %}
+                 {% if producer.is_producer %}
+                       WhereIAm({{ producer.latitude }}, {{ producer.longitude}}, '{{producer.email }}', false);
+                    {% endif %}
+                {% endfor %}
+            function geolocate() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        var geolocation = new google.maps.LatLng(
+                        position.coords.latitude, position.coords.longitude);
+
+                        latitude = position.coords.latitude;
+                        longitude = position.coords.longitude;
+                        document.getElementById("latitude").value = latitude;
+                        document.getElementById("longitude").value = longitude;
+                        autocomplete.setBounds(new google.maps.LatLngBounds(geolocation, geolocation));
+                    });
+                }
+
+            }
+
+       </script>
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+
+        <hr>
+
+    </div>
+
+  {% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+Create new review
+{% endblock %}
+{% block doplinks %}
+<link href="{% static "css/bootstrap-rating.css"%}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-12">
+                <h1 class="page-header">{{ product.name }}
+                    <small>Explain Your Work</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/">Home</a>
+                    </li>
+                    <li class="active"><a href="/products/{{ product.category.slug }}/">{{ product.category.slug }}</a></li>
+                    <li class="active"><a href="/products/{{ product.category.slug }}/{{ product.slug }}/">{{ product.name }}</a></li>
+                    <li class="active">Add comment</li>
+                </ol>
+            </div>
+
+        </div>
+        <div class="well">
+            <h4>Leave a Comment:</h4>
+            <form action="" method="post" role="form">
+                <div class="form-group">
+                    <input class="form-control" id="id_title" height="400" name="title" required="" type="text">
+                    <textarea class="form-control" id="id_review" rows="3" name="review"></textarea>
+                    <input type="hidden" class="rating" id="id_rating" name="rating"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                {% csrf_token %}
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascript %}
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-rating.min.js' %}"></script>
+
+    <script>
+          $(function () {
+            $('input.check').on('change', function () {
+              alert('Rating: ' + $(this).val());
+            });
+            $('#programmatically-set').click(function () {
+              $('#programmatically-rating').rating('rate', $('#programmatically-value').val());
+            });
+            $('#programmatically-get').click(function () {
+              alert($('#programmatically-rating').rating('rate'));
+            });
+            $('#programmatically-reset').click(function () {
+              $('#programmatically-rating').rating('rate', '');
+            });
+            $('.rating-tooltip').rating({
+              extendSymbol: function (rate) {
+                $(this).tooltip({
+                  container: 'body',
+                  placement: 'bottom',
+                  title: 'Rate ' + rate
+                });
+              }
+            });
+            $('.rating-tooltip-manual').rating({
+              extendSymbol: function () {
+                var title;
+                $(this).tooltip({
+                  container: 'body',
+                  placement: 'bottom',
+                  trigger: 'manual',
+                  title: function () {
+                    return title;
+                  }
+                });
+                $(this).on('rating.rateenter', function (e, rate) {
+                  title = rate;
+                  $(this).tooltip('show');
+                })
+                .on('rating.rateleave', function () {
+                  $(this).tooltip('hide');
+                });
+              }
+            });
+            $('.rating').each(function () {
+              $('<span class="label label-default"></span>')
+                .text($(this).val() || ' ')
+                .insertAfter(this);
+            });
+            $('.rating').on('change', function () {
+              $(this).next('.label').text($(this).val());
+            });
+          });
+    </script>
+{% endblock %}

@@ -1,0 +1,51 @@
+  {% extends 'base.html' %}
+{% load i18n %}
+  {% block content %}
+
+     <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{ product.name }}
+                    <small>Explain Your Work</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/">Home</a>
+                    </li>
+                    <li class="active"><a href="/products/{{ product.category.slug }}/"> {{ product.category }}</a></li>
+                    <li class="active"><a href="/products/{{ product.category }}/{{ product.slug }}/"> {{ product.name }}</a></li>
+                    <li class="active">I will produce it</li>
+                </ol>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+
+                For produce that product, you must have so match equipment!
+                <form action="" method="post">
+                    {{ form }}
+                    <label>Are you agree with our conditions?</label>
+                    <input type="checkbox" value="1" name="agree">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <span class="glyphicon glyphicon-send"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="page-header">{% trans "Related Projects" %}</h3>
+            </div>
+            {% for prod in related %}
+            <div class="col-sm-3 col-xs-6">
+                <a href="/products/{{ prod.category.slug }}/{{ prod.slug }}">
+                    <img class="img-responsive img-customer" src="/media/{{ prod.photo_set.first }}" >
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+  {% endblock %}

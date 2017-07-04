@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block doplinks %}
+<link href="{% static "css/custom_style.css" %}" rel="stylesheet">
+{% endblock %}
+   {% block content %}
+          <div class="container">
+              <div class="row">
+
+            <div class="col-lg-12">
+                <h1 class="page-header">Login or Create an Account
+                    <small>It's Nice to Meet You!</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="index.html">Home</a>
+                    </li>
+                    <li class="active">About</li>
+                </ol>
+            </div>
+
+        </div>
+              <div class="row">
+
+
+            <form action="" method="post">
+                {% csrf_token %}
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="form-box">
+                    <h3 class="title">Registered Customers</h3>
+                    <p>If you have an account with us, please log in.</p>
+                    <div class="form-list">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                            <input maxlength="100" id="id_email" name="email" class="input-block-level" type="email" autofocus="">
+                        <label for="pass">Password <span class="required">*</span></label>
+                            <input id="id_password" name="password" class="input-block-level" type="password">
+                        <label for="pass">Confirm Password <span class="required">*</span></label>
+                            <input name="password2" class="input-block-level" type="password">
+                    <div class="buttons-box clearfix">
+                         <span class="required"><b>
+                            {% if form.errors %}
+                            Please, fill all fields.<br>
+                             {% endif %}
+                            {% if passvalid %}
+                            Password didn't match.
+                            {% endif %}
+                         </b></span><br>
+                        <button type="submit" class="btn btn-primary" title="Submit"><span>Submit</span></button>
+                        <a href="#" class="forgot">Forgot Your Password?</a>
+                        <span class="required"><b>*</b></span>Required Fields
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="info-box">
+                    <h3 class="title">New Customers</h3>
+                    <p>By creating an account with our store, you will be able to move through the checkout process faster, store multiple shipping addresses, view and track your orders in your account and more.</p>
+                    <a href="{% url "login" %}">
+                        <button type="button" title="Create an Account" class="btn btn-danger"><span>Login an Account</span></button>
+                    </a>
+                </div>
+            </div>
+                  </div>
+            </div>
+     {% endblock %}

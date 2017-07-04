@@ -1,0 +1,108 @@
+  {% extends 'base.html' %}
+{% load static %}
+{% block title %}
+product title
+{% endblock %}
+{% block doplinks %}
+<link href="{% static "css/custom_style.css" %}" rel="stylesheet">
+{% endblock %}
+  {% block content %}
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-12">
+                <h1 class="page-header">Four Column Portfolio
+                    <small>Showcase Your Work</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/">Home</a>
+                    </li>
+                    <li class="active">All products</li>
+                    <div class="pull-right">
+                        <button class="btn btn-link" id="list-view-btn"><i class="glyphicon glyphicon-th-list"></i></button>
+                        <button class="btn btn-link" id="table-view-btn"><i class="glyphicon glyphicon-th"></i></button>
+                    </div>
+                </ol>
+            </div>
+
+        </div>
+        <!-- /.row -->
+<div id="table-view">
+    {% for item in grouped_products %}
+        {% if forloop.first %}<div class="row">{% endif %}
+                    <div class="col-md-3 portfolio-item">
+                        <a href="/products/{{ item.category.slug }}/{{ item.slug }}">
+                        <img class="img-responsive" src="/media/{{ item.photo_set.first }}">
+                    </a>
+                </div>
+           {% if forloop.counter|divisibleby:4 %}</div><div class="row">{% endif %}
+        {% if forloop.last %}</div>{% endif %}
+
+    {% endfor %}
+</div>
+
+        <div class="col-xs-12 list-hidden">
+                {% for item in grouped_products %}
+							<div class="product-col list clearfix">
+								<div class="image">
+                                    <a href="/products/{{ item.category.slug }}/{{ item.slug }}">
+                        <img class="img-responsive" src="/media/{{ item.photo_set.first }}">
+                            </a>
+								</div>
+								<div class="caption">
+									<h4><a href="/products/{{ item.category.slug }}/{{ item.slug }}">
+                                        {{ item.name }}</a></h4>
+									<div class="description">
+										Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+									</div>
+									<div class="price">
+										<p class="price-tax">Ex Tax: $279.99</p>
+										<span class="price-new">${{ item.price }}</span>
+										<span class="price-old">$249.50</span>
+									</div>
+									<div class="cart-button button-group">
+                                <form action="{% url "cart:cart_add" item.id %}" method="post">
+                                        {%  csrf_token %}
+										<button type="submit" class="btn btn-primary">
+											Add to cart
+											<i class="fa fa-shopping-cart"></i>
+										</button>
+                                 </form>
+
+									</div>
+								</div>
+							</div>
+            {% endfor %}
+						</div>
+
+        <hr>
+        <div class="row text-center">
+
+            <div class="col-lg-12">
+                <ul class="pagination">
+                    <li><a href="#">&laquo;</a>
+                    </li>
+                    <li class="active"><a href="#">1</a>
+                    </li>
+                    <li><a href="#">2</a>
+                    </li>
+                    <li><a href="#">3</a>
+                    </li>
+                    <li><a href="#">4</a>
+                    </li>
+                    <li><a href="#">5</a>
+                    </li>
+                    <li><a href="#">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+  {% endblock %}
+{% block javascript %}
+      <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+{% endblock %}

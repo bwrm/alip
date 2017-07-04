@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block doplinks %}
+<link href="{% static "css/custom_style.css" %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+    <div class="container">
+            <div class="row">
+
+            <div class="col-lg-12">
+                <h1 class="page-header">Shopping cart
+                    <small>Showcase Your Work</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/">Home</a>
+                    </li>
+                    <li class="active">Shopping Cart</li>
+                </ol>
+            </div>
+
+        </div>
+         <div class="row">
+            <div class="cart col-sm-12 col-md-12">
+        {% if  cart|length > 0 %}
+        <div class="table-box">
+            <table id="shopping-cart-table" class="data-table cart-table shopping-cart-table table table-bordered table-striped">
+                <thead>
+                    <tr class="first_last">
+                        <th rowspan="1">&nbsp;</th>
+                        <th rowspan="1" class="td-name">
+                            <span class="nobr">Product Name</span>
+                        </th>
+                        <th rowspan="1" class="td-attribute">&nbsp;</th>
+                        <th class="a-center td-price" colspan="1">
+                            Unit Price
+                        </th>
+                        <th rowspan="1" class="a-center td-qty">
+                            Qty
+                        </th>
+                        <th class="a-center td-total" colspan="1">
+                            Subtotal
+                        </th>
+                        <th rowspan="1" class="a-center td-remove">&nbsp;</th>
+                        <th rowspan="1" class="a-center td-remove">&nbsp;</th>
+                    </tr>
+                 </thead>
+                <tbody>
+            {% for item in cart %}
+            {% with product=item.product %}
+            <tr class="first_last odd">
+                <td class="td-images">
+                    <a href="/products/{{ product.category.slug }}/{{ product.slug }}" title="Leia Hero of Yavin Mini-Bust" class="product-image">
+                        <img src="/media/{{product.photo_set.first}}" alt="{{ product.name }}" title="Product Name" class="img-thumbnail">
+                    </a>
+                </td>
+                <td class="td-name">
+                    <h2 class="product-name">
+                        <a href="/products/{{ product.category.slug }}/{{ product.slug }}">{{ product.name }}</a>
+                    </h2>
+                </td>
+                <td class="a-center td-edit">
+                    <a class="edit" href="/products/{{ product.category.slug }}/{{ product.slug }}" title="Edit item parameters"><i class="fa fa-pencil"></i> Edit</a>
+                </td>
+                <td class="a-right td-price">
+                    <span class="cell-label">Unit Price:</span>
+                    <span class="cart-price">
+                        <span class="price">{{ product.price }}</span>
+                    </span>
+                </td>
+                <td class="a-center td-qty">
+                <span class="cell-label">Quantity:</span>
+					<div class="input-group btn-block">
+                    <form action="{% url "cart:cart_add" product.id %}" method="POST">
+                         {{ item.update_quantity_form.quantity }}
+                         {{ item.update_quantity_form.price }}
+                         {{ item.update_quantity_form.update }}
+					</div>
+                </td>
+               <td class="a-right td-price">
+                    <span class="cell-label">Subtotal:</span>
+                    <span class="cart-price">
+                        <span class="price">{{ item.total_price }}</span>
+                    </span>
+               </td>
+                <td class="a-center td-remove last">
+                    <button type="submit" title="Update Shopping Cart" class="btn btn-link"><div class="glyphicon glyphicon-refresh"></div></button>
+                    <a class="edit editMobile" href="" title="Edit item parameters">
+                         <i class="fa fa-pencil"></i> Edit</a>
+                </td>
+                {% csrf_token %}
+                </form>
+                <td class="a-center td-remove last">
+                    <form action="{% url "cart:cart_remove" product.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" title="Clear Shopping Cart" class="btn btn-link" ><div class="glyphicon glyphicon-trash"></div></button>
+                    </form>
+                </td>
+            </tr>
+                  {% endwith %}
+            {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <table class="shopping-cart-table shopping-cart-table-button table table-bordered table-striped">
+            <tbody>
+            <tr>
+                <td colspan="7" class="action">
+                          <button type="button" class="btn btn-primary pull-left" onclick="window.location='{% url "main_site:products" %}'">
+                            <span class="glyphicon glyphicon-arrow-left"></span> Continue Shpopping
+                          </button>
+                    <button type="submit" onclick="window.location='{% url "cart:cart_remove_all" %}'" value="empty_cart" title="Clear Shopping Cart" class="btn btn-link update" id="empty_cart_button">
+                        <i class="fa fa-eraser"></i> Clear Shopping Cart</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+    <div id="car-bottom" class="row">
+        <div class="totals col-sm-4 col-md-4 pull-right">
+            <div class="car-bottom-box bg total">
+                Subtotal
+                <span class="total-price">{{ cart.get_total_price }}</span><br>
+                <strong>Grand Total</strong>
+                <span class="total-price">{{ cart.get_total_price }}</span>
+                <div class="checkout-types">
+                    <button type="button" title="Proceed to Checkout" class="btn btn-primary" onclick="window.location='{% url "orders:order_create" %}'">
+                        <span>Proceed to Checkout</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="cart-collaterals">
+            <div class="col2-set">
+                <div class="col-2">
+                </div>
+            </div>
+        </div>
+{% else %}
+<h1>Shopping Cart is Empty</h1>
+{% endif %}
+</div>
+{% endblock %}

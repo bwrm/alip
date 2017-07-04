@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+  {% block content %}
+
+    <!-- Start: MAIN CONTENT -->
+    <div class="content">
+      <div class="container">
+        <div class="page-header">
+          <h1>Signin to Bootbusiness</h1>
+        </div>
+           {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+              {% endif %}
+        <div class="row">
+          <div class="span6 offset3">
+            <h4 class="widget-header"><i class="icon-lock"></i> Signin to Bootbusiness</h4>
+            <div class="widget-body">
+              <div class="center-align">
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+         <div class="row">
+           <div class="col-md-5">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+             </div>
+                    <br />
+            <div class="row">
+            <div class="col-md-5">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+            </div>
+
+            </div>
+
+                   <div class="remember-me">
+                    <div class="pull-left">
+                      <label class="checkbox">
+                        <input type="checkbox"> Remember me
+                      </label>
+                    </div>
+
+                      <a href="#">Forgot password?</a>
+
+                    <div class="clearfix"></div>
+                  </div>
+                    <input type="submit" value="login" />
+                    <input type="hidden" name="next" value="{{ next }}" />
+                </form>
+                <h4><i class="icon-question-sign"></i> Don't have an account?</h4>
+                <a href="/signup" class="btn btn-large bottom-space">Signup</a>
+                <h4><i class="icon-thumbs-up"></i> Sign in with third party account</h4>
+                <ul class="signin-with-list">
+                  <li>
+                    <a class="btn-twitter">
+                      <i class="icon-twitter icon-large"></i>
+                      Signin with Twitter
+                    </a>
+                  </li>
+                  <li>
+                    <a class="btn-facebook">
+                      <i class="icon-facebook icon-large"></i>
+                      Signin with Facebook
+                    </a>
+                  </li>
+                  <li>
+                    <a class="btn-google">
+                      <i class="icon-google-plus icon-large"></i>
+                      Signin with Google
+                    </a>
+                  </li>
+                  <li>
+                    <a class="btn-github">
+                      <i class="icon-github icon-large"></i>
+                      Signin with Github
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- End: MAIN CONTENT -->
+     {% endblock %}

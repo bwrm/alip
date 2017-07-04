@@ -1,0 +1,111 @@
+{% load staticfiles %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+    <!-- Bootstrap core CSS -->
+    <link href="{% static "css/bootstrap-combined.min.css"%}" rel="stylesheet">
+    <link href="{% static "css/bootstrap.min.css"%}" rel="stylesheet">
+    <!-- Add custom CSS here -->
+    <link href="{% static "css/modern-business.css"%}" rel="stylesheet">
+    <link href= "{% static "font-awesome/css/font-awesome.min.css " %}" rel="stylesheet">
+{% block doplinks %}
+{% endblock %}
+{% load category_tags %}
+{#        <div class="dropdown">#}
+{#            <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="#">#}
+{#                Dropdown <span class="caret"></span>#}
+{#            </a>#}
+{#        {% for node,structure in category|tree_info %}#}
+{#        {% if structure.new_level %}#}
+{#    		<ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">#}
+{#              <li class="dropdown-submenu">#}
+{#               {% else %}</li>#}
+{#                <li class="dropdown-submenu">#}
+{#                  {% endif %}{% ifequal node category %}#}
+{#                        <strong>{{ node.name }}</strong>#}
+{#                    {% else %}<a href="{{ node.get_absolute_url }}">{{ node.name }}</a>#}
+{#                    {% endifequal %}#}
+{#                    {% for level in structure.closed_levels %}</li></ul>{% endfor %}#}
+{#        {% endfor %}#}
+{##}
+{#        </div>#}
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- You'll want to use a responsive image option so this logo looks good on devices - I recommend using something like retina.js (do a quick Google search for it and you'll find it) -->
+                <a class="navbar-brand" href="/">Our site</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                 <li class="dropdown">
+                        <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="#">
+                Каталог <span class="caret"></span>
+                     </a>
+               {% for node,structure in category|tree_info %}
+                    {% if structure.new_level %}
+                        <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                          <li class="dropdown-submenu">
+                           {% else %}</li>
+                            <li class="dropdown-submenu">
+                              {% endif %}{% ifequal node category %}
+                                    <strong>{{ node.name }}</strong>
+                                {% else %}<a href="{{ node.get_absolute_url }}">{{ node.name }}</a>
+                                {% endifequal %}
+                                {% for level in structure.closed_levels %}</li></ul>{% endfor %}
+                    {% endfor %}
+                    </li>
+                    <li><a href="{% url 'main_site:about' %}">{% trans "About" %}</a>
+                    </li>
+                     <li><a href="/products">{% trans "Products" %}</a></li>
+                    <li><a href="/map">{% trans "Map" %}</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="/myaccount/">{{ user }}</a></li>
+                    <li> <a href="{% url 'logout' %}" class="top-menu"><span class="glyphicon glyphicon-log-out"></span></a></li>
+        {% else %}
+           <li> <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a></li>
+        {% endif %}
+                <li> <a href="{% url 'cart:cart_detail' %}" class="top-menu">
+                    {% if cart|length > 0 %}
+                    {{ cart|length }}
+                    {% endif %}
+                    <span class="glyphicon glyphicon-shopping-cart"></span></a></li>
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+{% block content %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block javascript %}
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+ {% extends 'base.html' %}
+{% load staticfiles %}
+{% block doplinks %}
+    <link href="{% static "css/custom_style.css" %}" rel="stylesheet" xmlns="http://www.w3.org/1999/html">
+{% endblock %}
+  {% block content %}
+    <!-- Page Content -->
+
+    <div class="container">
+
+        <div class="row">
+
+            {% include "accountbase.html" %}
+
+            <div class="col-md-9 col-sm-8">
+                <h1 class="page-header">Sidebar Page
+                    <small>For Deeper Customization</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="main_site/index.html">Home</a>
+                    </li>
+                    <li class="active">Full Width Page</li>
+                </ol>
+                <div class="col-md-14">
+                <div class="form-box">
+                    <h3 class="title">Registered Customers</h3>
+                    <p> If you have an account with us, please log in.</p>
+                        <div class="row">
+                            <form action="" method="post">
+                            <div class="col-sm-6 col-md-6">
+                                <label for="firstname">{{ form.first_name.label }}</label>
+                                <div class="input-box" id="first_name">
+                                    {{ form.first_name }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6">
+                                <label for="lastname">{{ form.last_name.label }}</label>
+                                <div class="input-box" id="last_name">
+                                    {{ form.last_name }}
+                                </div>
+
+                            </div>
+                        </div>
+                <div id="company">
+                    <label>{{ form.company.label }}</label><br>
+                    {{ form.company }}
+                </div>
+                <div id="phone_number">
+                    <label>{{ form.phone_number.label }}</label><br>
+                    {{ form.phone_number }}
+                </div>
+                     <div class="row">
+                            <div class="col-sm-6 col-md-6">
+                                <label for="firstname">{{ form.locality.label }}</label><br>
+                                <div class="input-box" id="locality">
+                                    {{ form.locality }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6">
+                                <label>{{ form.postal_code.label }}</label><br>
+                                <div class="input-box" id="postal_code">
+                                    {{ form.postal_code }}
+                                </div>
+                            </div>
+                     </div>
+                <div id="country">
+                    <label>{{ form.country.label }}</label><br>
+                    {{ form.country }}
+                </div>
+                <div id="location">
+                    <label>{{ form.location.label }}</label><br>
+                    {{ form.location }}
+                </div>
+
+                    <div class="buttons-box clearfix">
+                            <span class="required"><b>
+                            {% if form.errors %}
+                            Your username and password didn't match. Please try again.
+                             {% endif %}</b></span><br>
+                        <button type="submit" class="btn btn-primary" title="Submit"><span>Submit</span></button>
+                    </div>
+            </div>
+        </div>
+            </div>
+        {% csrf_token %}
+                </form>
+        </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+{% endblock %}
+{% block javascript %}
+      <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,90 @@
+ {% extends 'base.html' %}
+{% block title %}
+<title>
+{% if user.is_authenticated %}
+{{ user }} account
+{% endif %}
+</title>
+{% endblock %}
+  {% block content %}
+    <!-- Page Content -->
+
+    <div class="container">
+
+        <div class="row">
+
+            {% include "accountbase.html" %}
+
+            <div class="col-md-9 col-sm-8">
+                <h1 class="page-header">Sidebar Page
+                    <small>For Deeper Customization</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="{% url 'main_site:index' %}">Home</a>
+                    </li>
+                    <li class="active">Full Width Page</li>
+                </ol>
+                    <div class="table-box">
+            <table id="shopping-cart-table" class="data-table cart-table shopping-cart-table table table-bordered table-striped">
+                <thead>
+                    <tr class="first_last">
+                        <th rowspan="1">&nbsp;</th>
+                        <th rowspan="1" class="td-name">
+                            <span class="nobr">Product Name</span>
+                        </th>
+                        <th rowspan="1" class="td-attribute">&nbsp;</th>
+                        <th class="a-center td-price" colspan="1">
+                            Unit Price
+                        </th>
+                        <th rowspan="1" class="a-center td-qty">
+                            Qty
+                        </th>
+                        <th class="a-center td-total" colspan="1">
+                            Subtotal
+                        </th>
+                    </tr>
+                 </thead>
+                <tbody>
+            {% for order in orders %}
+            <tr class="first_last odd">
+                <td class="td-images">
+                    <a href="/products/{{ order.product.category.slug }}/{{ order.product.slug }}" title="Leia Hero of Yavin Mini-Bust" class="product-image">
+                        <img src="/media/{{order.product.photo_set.first}}" alt="{{ order.product.name }}" title="Product Name" class="img-thumbnail" style="max-height: 150px">
+                    </a>
+                </td>
+                <td class="td-name">
+{#                    <h2 class="product-name">#}
+                        <a href="/products/{{ order.product.category.slug }}/{{ order.product.slug }}">{{ order.product.name}}</a>
+{#                    </h2>#}
+                </td>
+                <td class="a-center td-edit">
+                    Status
+                </td>
+                <td class="a-right td-price">
+                    <span class="cart-price">
+                        <span class="price">{{ order.price }}</span>
+                    </span>
+                </td>
+                <td class="a-right td-price">
+                    <span class="cart-price">
+                        <span class="price">{{ order.quantity }}</span>
+                    </span>
+                </td>
+					<div class="input-group btn-block">
+                <td class="a-center td-remove last">
+                    {{ order.get_cost }}
+                </td>
+            </tr>
+            {% endfor %}
+                </tbody>
+            </table>
+                    </div>
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+{% endblock %}
