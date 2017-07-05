@@ -65,7 +65,6 @@ class ProdDetailView(DetailView):
         endprice = Prices()
         context['endprice'] = endprice.get_end_price(self.prod.pk)
         context['category'] = Category.objects.all()
-        context['cat_tree'] = Category.parent
         context['minprice'] = avprice['price__min']
         context['maxprice'] = avprice['price__max']
         context['cart_form'] = CartAddProductForm()
