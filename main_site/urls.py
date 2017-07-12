@@ -7,10 +7,10 @@ app_name = 'main_site'
 
 urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='index'),
-    url(r'^products/(?P<category>[-\w]+)/(?P<slug>[-\w]+)/$', views.ProdDetailView.as_view(), name='product'),
+    url(r'^(?P<category>[-\w]+)/(?P<pk>[0-9]+)/(?P<slug>[-\w]+)/$', views.ProdDetailView.as_view(), name='product'),
     #/products/category/
-    url(r'^products/(?P<category>[-\w]+)/$', views.ProdCatView.as_view(), name='productcat'),
-    url(r'^products/$', views.GoodListView.as_view(), name='products'),
+    url(r'^c/([-\w/]+)/$', views.ProdCatView.as_view(), name='productcat'),
+    url(r'^catalog/$', views.GoodListView.as_view(), name='catalog'),
     url(r'^test/$', views.sometest, name='test'),
     url(r'^product/add/$', views.ProductCreate.as_view(), name='product-add'),
     # url(r'^product/(?P<prod_cat>[a-zA-Z0-9]+)/(?P<pk>[0-9]+)/update$', views.ProductUpdate.as_view(), name='product-update'),

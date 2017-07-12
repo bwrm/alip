@@ -2,26 +2,26 @@
 {% load i18n %}
      {% block doplinks %}
     {% load staticfiles %}
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{% static "css/xzoom.css"%}" media="all" />
     <link rel="stylesheet" type="text/css" href="{% static "css/magnific-popup.css"%}" media="all" />
+    <link href="{% static "css/jquery-ui.css"%}" rel="stylesheet">
+{#    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>#}
     <script type="text/javascript" src="{% static "js/magnific-popup.js"%}"></script>
     <script type="text/javascript" src="{% static "js/xzoom.min.js"%}"></script>
-<link href="{% static "css/jquery-ui.css"%}" rel="stylesheet">
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
-  $( function() {
-    $( "#dialog" ).dialog({
-      autoOpen: false,
-      width: '90%',
-      modal: true,
-    });
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+      $( function() {
+        $( "#dialog" ).dialog({
+          autoOpen: false,
+          width: '90%',
+          modal: true,
+        });
 
-    $( "#opener" ).on( "click", function() {
-      $( "#dialog" ).dialog( "open" );
-    });
-  } );
-  </script>
+        $( "#opener" ).on( "click", function() {
+          $( "#dialog" ).dialog( "open" );
+        });
+      } );
+     </script>
 {% endblock %}
   {% block content %}
 
@@ -45,7 +45,7 @@
 
             <div class="col-md-4">
                 <div class="xzoom-container">
-          <img class="xzoom5" id="xzoom-magnific" style="height: 320px; width: 300px;" src="http://placehold.it/350x300" xoriginal="http://placehold.it/350x300" />
+                <img class="xzoom5" id="xzoom-magnific" style="height: 320px; width: 300px;" src="/media/{{ product.photo_set.first }}" alt="product" class="img-responsive">
           <div class="xzoom-thumbs">
               {% for im in product.photo_set.all %}
             <a href="/media/{{ im }}"><img class="xzoom-gallery5" width="45" src="/media/{{ im }}"  xpreview="/media/{{ im }}" title="The description goes here"></a>
@@ -120,7 +120,7 @@
 								We are so lucky living in such a wonderful time. Our almost unlimited ...
 							</div>
 							<div class="price">
-								<span class="price-new" id="fullprice">$199.50</span>
+								<span class="price-new" id="fullprice">1</span>
 							</div>
 							<div class="cart-button button-group">
                                 <form action="{% url "cart:cart_add" product.id %}" method="post">

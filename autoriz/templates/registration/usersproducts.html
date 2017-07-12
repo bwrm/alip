@@ -20,7 +20,7 @@
                 {% for item in grouped_products %}
                     {% if forloop.first %}<div class="row">{% endif %}
                                 <div class="col-md-3 portfolio-item">
-                                    <a href="/products/{{ item.category.slug }}/{{ item.slug }}">
+                                    <a href="/{{ item.category.slug }}/{{ item.pk }}/{{ item.slug }}">
                                     <img class="img-responsive" src="/media/{{ item.photo_set.first }}">
 
                                 </a>

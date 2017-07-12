@@ -56,15 +56,20 @@ class PlainUser(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('autoriz:myaccount-home')
 
-class BelongingToProducerMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.groups.filter(name='Producer').exists() or user.is_superuser
-
-
-class AllUsersProduct(LoginRequiredMixin, ListView):
+class AllUsersProduct(UserPassesTestMixin, ListView):
     model = Product
     template_name = 'registration/usersproducts.html'
     context_object_name = 'grouped_products'
+
+    def test_func(self):
+        self.curusr = self.request.user
+        if not self.curusr.is_authenticated:
+            return False
+        elif self.curusr.is_producer:
+            return True
+        else:
+            #TODO: redirect to error page if user have not permission
+            return False
 
     def get_queryset(self):
         base_qs = super(AllUsersProduct, self).get_queryset()

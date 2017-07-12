@@ -2,9 +2,7 @@
 *~
 __pycache__
 myvenv
-db.sqlite3
 .DS_Store
-/media
 /autoriz/migrations
 /cart/migrations
 /main_site/migrations

@@ -1,4 +1,6 @@
   {% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
 {% block title %}
 main page
 {% endblock %}
@@ -14,22 +16,21 @@ main page
         <!-- Wrapper for slides -->
         <div class="carousel-inner">
             <div class="item active">
-                <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=Slide One');"></div>
+                <div class="fill" style="background-image:url({% static 'img/wooden-toy.jpg' %});"></div>
                 <div class="carousel-caption">
-                    <h1>Modern Business - A Bootstrap 3 Template</h1>
+                    <h1>Развивающие игрушки для детей</h1>
                 </div>
             </div>
             <div class="item">
-                <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=Slide Two');"></div>
+                <div class="fill" style="background-image:url({% static 'img/spinner.jpg' %});"></div>
                 <div class="carousel-caption">
-                    <h1>Ready to Style &amp; Add Content</h1>
+                    <h1>Спиннеры на любой вкус</h1>
                 </div>
             </div>
             <div class="item">
-                <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=Slide Three');"></div>
+                <div class="fill" style="background-image:url({% static 'img/bag-hooks.jpg' %});"></div>
                 <div class="carousel-caption">
-                    <h1>Additional Layout Options at <a href="http://startbootstrap.com">http://startbootstrap.com</a>
-                    </h1>
+                    <h1>Приспособления для удобства</h1>
                 </div>
             </div>
         </div>
@@ -215,9 +216,4 @@ main page
 
 {% block footer %}
     {% include 'footer.html' %}
-{% endblock %}
-{% block javascript %}
-    {% load static %}
-    <script src="{% static "js/jquery-1.10.2.js"%}"></script>
-    <script src="{% static "js/bootstrap.js"%}"></script>
 {% endblock %}

@@ -19,17 +19,19 @@ from cart.forms import CartAddProductForm
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Min, Max
 from unidecode import unidecode
+from urllib.parse import urlparse
 
 class Prices:
     """class that calculate all products costs"""
-    def get_end_price(self, product_id):
+    def get_end_price(self, product_id, producer_price):
         self.designers = get_object_or_404(Product, id=product_id).designer_price
         self.our = get_object_or_404(OurProfit, id=1).profit
-        self.producers = get_object_or_404(DetailProduce, product_id=product_id).price
-        self.finish = round(float(self.designers + self.producers)*(self.our/100+1), 2)
+        # self.producers = get_object_or_404(DetailProduce, product_id=product_id, producer_id=producer_id).price
+        self.finish = round(float(self.designers + producer_price)*(self.our/100+1), 2)
         return self.finish
 
 class IndexView(TemplateView):
+    """home page view"""
     template_name = 'main_site/index.html'
 
 
@@ -56,24 +58,28 @@ class ProdDetailView(DetailView):
     template_name = 'main_site/prod-page.html'
 
     def get_context_data(self, **kwargs):
-        # TODO: change searching product by slug to pk
-        self.pk = self.kwargs.get('slug', None)
-        self.prod = Product.objects.get(slug=self.pk)
+        self.pk = self.kwargs.get('pk', None)
+        self.prod = Product.objects.get(pk=self.pk)
         context = super(ProdDetailView,self).get_context_data(**kwargs)
-        current_object = DetailProduce.objects.filter(product_id=self.prod.pk)
-        avprice = current_object.aggregate(Min('price'), Max('price'))
-        endprice = Prices()
-        context['endprice'] = endprice.get_end_price(self.prod.pk)
-        context['category'] = Category.objects.all()
-        context['minprice'] = avprice['price__min']
-        context['maxprice'] = avprice['price__max']
+        try:
+            # try if somebody produce product
+            current_object = DetailProduce.objects.filter(product_id=self.pk)
+            avprice = current_object.aggregate(Min('price'), Max('price'))
+            endprice = Prices()
+            context['minprice'] = endprice.get_end_price(self.prod.pk, avprice['price__min'])
+            context['maxprice'] = endprice.get_end_price(self.prod.pk, avprice['price__max'])
+        except:
+            # if nobody produce product.(new product added by designer)
+            context['minprice'] = 0
+            context['maxprice'] = 0
+
         context['cart_form'] = CartAddProductForm()
         try:
-            #check if user alredy produce product
-            DetailProduce.objects.get(product_id=self.prod.pk, producer_id=self.request.user.id)
+            #check if current user alredy produce product
+            DetailProduce.objects.get(product_id=self.pk, producer_id=self.request.user.id)
             context['alredy_produce'] = True
         except:
-            pass
+            context['alredy_produce'] = False
         related=[]
         for i in Product.objects.filter()[:4]:
             related.append(i)
@@ -88,31 +94,34 @@ class ProdCatView(ListView):
     context_object_name = 'grouped_products'
 
     def get_queryset(self, **kwargs):
-        if self.kwargs['category'] == None:
-            self.cat = Product.objects.filter(available=True)
-        else:
-            self.cat = Product.objects.filter(
-                category_id=Category.objects.get(slug=self.kwargs['category']).id,
-                available=True
-            )
+        url = self.request.path
+        self.spis = [i for i in url.split('/') if i != '']
+        self.category_id = Category.objects.get(slug=self.spis[-1], active=True).get_descendants(include_self=True)
+        self.cat = Product.objects.filter(available=True, category_id__in=self.category_id)
         return self.cat
-    #
-    # def get_context_data(self, **kwargs):
-    #     context = super(ProdCatView, self).get_context_data(**kwargs)
-    #     return context
 
 def sometest(request):
-    all_data = request.GET
-    all = QueryDict('name=John&lastname=Smith')
-    return render(request, 'main_site/test.html', {'all_data':all_data.getlist('mytext'), 'all': all})
+    url = request.path
+    res = url.split('/')
+    spis = [i for i in res if i!='']
+    return render(request, 'main_site/test.html', {'all_data':spis,})
 
 
-class ProductCreate(LoginRequiredMixin, CreateView):
+class ProductCreate(UserPassesTestMixin, CreateView):
     model = Product
     form_class = ProdForm
     template_name = 'main_site/product_form.html'
     success_url = reverse_lazy('upload:photo_upload')
     designer = object = None
+
+    def test_func(self):
+        self.curusr = self.request.user
+        if not self.curusr.is_authenticated:
+            return False
+        elif self.curusr.is_producer:
+            return True
+        else:
+            return False
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -125,7 +134,6 @@ class ProductCreate(LoginRequiredMixin, CreateView):
         self.object.save()
         self.ind = Product.objects.get(slug=self.object.slug, designer=self.object.designer)
         self.request.session['prod_id'] = self.ind.id
-        #TODO: add error to form validation if slug not unique for current user
         return super(ProductCreate, self).form_valid(form)
 
 
@@ -181,7 +189,7 @@ class ProductProduce(CreateView):
     def get_success_url(self):
         self.curprod = get_object_or_404(Product, pk=self.kwargs.get('pk'))
         return reverse_lazy('main_site:product',
-                            kwargs={'category': self.curprod.category.slug, 'slug': self.curprod.slug})
+                            kwargs={'category': self.curprod.category.slug, 'pk':self.curprod.pk, 'slug': self.curprod.slug})
 
     #TODO: chek if user alredy producer
 
@@ -215,7 +223,7 @@ class ProductProduceSet(UpdateView):
 
     def get_success_url(self):
         self.curprod = get_object_or_404(Product, pk=self.kwargs.get('pk'))
-        return reverse_lazy('main_site:product', kwargs={'category': self.curprod.category.slug, 'slug': self.curprod.slug})
+        return reverse_lazy('main_site:product', kwargs={'category': self.curprod.category.slug, 'pk':self.curprod.pk, 'slug': self.curprod.slug})
 
     def get_object(self, queryset=None):
         obj = get_object_or_404(DetailProduce, producer_id=self.request.user.id, product_id=self.kwargs.get('pk'))

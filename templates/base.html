@@ -18,6 +18,7 @@
     <!-- Add custom CSS here -->
     <link href="{% static "css/modern-business.css"%}" rel="stylesheet">
     <link href= "{% static "font-awesome/css/font-awesome.min.css " %}" rel="stylesheet">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 {% block doplinks %}
 {% endblock %}
 {% load category_tags %}
@@ -50,14 +51,14 @@
                             <li class="dropdown-submenu">
                               {% endif %}{% ifequal node category %}
                                     <strong>{{ node.name }}</strong>
-                                {% else %}<a href="{{ node.get_absolute_url }}">{{ node.name }}</a>
+                                {% else %}<a href="http://{{ request.META.HTTP_HOST }}/c{{ node.get_absolute_url }}">{{ node.name }}</a>
                                 {% endifequal %}
                                 {% for level in structure.closed_levels %}</li></ul>{% endfor %}
                     {% endfor %}
                     </li>
                     <li><a href="{% url 'main_site:about' %}">{% trans "About" %}</a>
                     </li>
-                     <li><a href="/products">{% trans "Products" %}</a></li>
+                     <li><a href="{% url 'main_site:catalog' %}">{% trans "Products" %}</a></li>
                     <li><a href="/map">{% trans "Map" %}</a></li>
                     {% if user.is_authenticated %}
                     <li><a href="/myaccount/">{{ user }}</a></li>
@@ -77,7 +78,6 @@
         </div>
         <!-- /.container -->
     </nav>
-
 {% block content %}
 {% endblock %}
 
@@ -85,8 +85,11 @@
 {% endblock %}
 
 {% block javascript %}
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+{#    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>#}
+{#    <script src="/static/js/jquery-1.10.2.js"></script>#}
+    <script src="/static/js/bootstrap.js"></script>
 {% endblock %}
+
 </body>
 
 </html>
