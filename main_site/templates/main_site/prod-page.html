@@ -146,7 +146,12 @@
                      <div id="dialog" title="Show on map">
                       <form>
                         <fieldset>
-                            producer's info
+                            {% for p in producers %}
+                                {{ p.producer.email }}
+                                {{ p.producer.location }}
+                                {{ p.producer.longitude }}
+                                <hr>
+                            {% endfor %}
                           <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
                         </fieldset>
                       </form>

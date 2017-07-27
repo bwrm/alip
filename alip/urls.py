@@ -15,6 +15,8 @@ urlpatterns = [
     url(r'^orders/', include('orders.urls', namespace='orders')),
     url(r'^review/', include('review.urls', namespace='review')),
     url(r'', include('upload.urls', namespace='upload')),
+    url(r'^edg/', include('edg.urls', namespace='edg')),
+
 ]
 
 if settings.DEBUG:

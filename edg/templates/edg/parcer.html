@@ -1,0 +1,104 @@
+<html>
+<head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <style>
+        td
+        {
+            height: 50px;
+            width:50px;
+        }
+        .cssTable td th
+        {
+            text-align:center;
+            vertical-align:middle;
+        }
+    </style>
+</head>
+<body>
+<br>
+<hr>
+<div class="container">
+    <div class="row">
+        <div class="pull-right">
+            <form>
+                <input type="text" id="currency" value="0.2" class="pull-right"><br>
+                <button id="cur_pl" type="button" class="btn btn-default">Change currency <i class="glyphicon glyphicon-eur"></i> </button>
+            </form>
+        </div>
+<div class="col-sm-9">
+
+<form action="">
+    <label>Enter articles here. Ex: 70193321</label>
+<textarea name="articles" style="width: 100%; height: 250px;"></textarea>
+    <br>
+<button type="submit" class="btn btn-primary pull-right" style="width: 100%">Get data</button>
+</form>
+</div>
+        <div class="col-md-12">
+        <br>
+    <table style="width:100%; text-align:center; vertical-align:middle;" border="1">
+     <thead>
+  <tr>
+    <th class="cssTable">Name</th>
+    <th id="cssTable">Type Original Lt</th>
+    <th id="cssTable">Price Lithiania, €</th>
+    <th id="cssTable">Price Poland, PLN</th>
+    <th id="cssTable">Available Lithuania</th>
+    <th id="cssTable">Available Poland</th>
+    <th id="cssTable">Article</th>
+{#    <th id="cssTable">Package Info</th>#}
+  </tr>
+ </thead>
+    <tfoot>
+    <tr align="center">
+      <td><b>Sum(Lithuania price):</b></td>
+      <td><b><div id="result"></div></b></td>
+    </tr>
+  </tfoot>
+    <tbody>
+       {% for row in data %}
+        <tr>
+            <td>{{row.0}}</td>
+            <td>{{row.1}}</td>
+            <td><a href="http://www.ikea.com/lt/lt/catalog/products/{{row.6}}"  target="_blank"><div class="price_lt">{{row.2}}</div></a></td>
+            <td><a href="http://www.ikea.com/pl/pl/catalog/products/{{ row.6 }}" id="price_pl" target="_blank"><div class="price_pl">{{row.3}}</div></a></td>
+            <td>{{row.4}}</td>
+            <td>{{row.5}}</td>
+            <td>{{row.6}}</td>
+{#            <td>{{row.7}}</td>#}
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    <script>
+        $( "#cur_pl" ).on( "click", function() {
+        $(".changed_cur").remove();
+          var cur_cur = $( "#currency" ).val();
+          $(".price_pl").each(function() {
+            var value = $(this).text();
+            // add only if the value is number
+            if(!isNaN(value) && value.length != 0) {
+                cur_val = parseFloat(value) * cur_cur;
+                cur_val=Math.round(cur_val*100)/100;
+                $('<b><div class="changed_cur">'+cur_val+' €</div></b>').insertAfter($(this));
+{#                $(this).append('<b><div>'+cur_val+'</div></b>');#}
+            }
+            });
+        });
+$(window).bind('load', function(){
+        var sum = 0;
+        $('.price_lt').each(function() {
+            sum += Number($(this).text());
+        });
+        sum=Math.round(sum*100)/100;
+        // here, you have your sum
+    $('#result').text(sum);
+});
+
+     </script>
+</div>
+</div>
+</div>
+</body>
+</html>

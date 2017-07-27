@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'storages',
     'categories',
     'categories.editor',
+    'edg',
 ]
 
 MIDDLEWARE = [

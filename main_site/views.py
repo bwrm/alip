@@ -68,6 +68,7 @@ class ProdDetailView(DetailView):
             endprice = Prices()
             context['minprice'] = endprice.get_end_price(self.prod.pk, avprice['price__min'])
             context['maxprice'] = endprice.get_end_price(self.prod.pk, avprice['price__max'])
+            context['producers'] = current_object
         except:
             # if nobody produce product.(new product added by designer)
             context['minprice'] = 0
