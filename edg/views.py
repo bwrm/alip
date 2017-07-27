@@ -116,6 +116,9 @@ class ParcerView(TemplateView):
         art = self.find_price('lt', 'price1', 2)
         avail_lt = self.find_available('lt')
         avail_pl = self.find_available('pl')
-        context['data'] = zip(name,type,price3,price2,avail_lt,avail_pl,art)
+        try:
+            context['data'] = zip(name,type,price3,price2,avail_lt,avail_pl,art)
+        except:
+            pass
         return context
 
