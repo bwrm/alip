@@ -176,7 +176,9 @@ def invoce_view(request):
 def is_login(session):
     # loggin_check_url = "http://www.ikea.com/webapp/wcs/stores/servlet/GetUserInfo?storeId=23"
     loggin_check_url = "http://www.ikea.com/webapp/wcs/stores/servlet/GetUserInfo?storeId=19"
-    with open('somefile', 'rb') as f:
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    my_file = os.path.join(THIS_FOLDER, 'somefile')
+    with open(my_file, 'rb') as f:
         cookies = requests.utils.cookiejar_from_dict(pickle.load(f))
     resp1 = session.post(loggin_check_url, cookies=cookies)
     res = resp1.text.find(">Y</")
@@ -189,7 +191,9 @@ def login(session):
     login_url = "https://secure.ikea.com/webapp/wcs/stores/servlet/Logon?storeId=23&langId=-31&URL=MyProfile%3FDM_PersistentCookieCreated%3Dtrue%26storeId%3D23%26isContactMethodPresent%3Dtrue%26identitySignature%3D03gsXdE%252BkCBiftGGgtQCJJkiwss%253D%26langId%3D-31%26rememberMe%3Dtrue%26previousCommand%3Dlogon&logonId=alby.sv%40gmail.com&logonPassword=vlv83g%2BxX"
     login_url_pl = "https://secure.ikea.com/webapp/wcs/stores/servlet/Logon?storeId=19&langId=-27&logonId=alby.sv%40ya.ru&logonPassword=shpeonka1&rememberMe=true&previousCommand=logon&identitySignature=03gsXdE%2BkCBiftGGgtQCJJkiwss%3D&isContactMethodPresent=true&URL=MyProfile&DM_PersistentCookieCreated=true"
     session.post(login_url_pl)
-    with open('somefile', 'wb') as f:
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    my_file = os.path.join(THIS_FOLDER, 'somefile')
+    with open(my_file, 'wb') as f:
         pickle.dump(requests.utils.dict_from_cookiejar(session.cookies), f)
     if is_login(session):
         return True
