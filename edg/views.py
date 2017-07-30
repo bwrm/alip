@@ -198,7 +198,7 @@ def login(session):
 def add_to_list(session, item, quan=1):
     # add_to_list = "http://www.ikea.com/webapp/wcs/stores/servlet/IrwWSInterestItemAdd?partNumber="+item+"&langId=-27&storeId=19&listId=260857224&quantity="+quan
     add_to_list = "http://www.ikea.com/webapp/wcs/stores/servlet/IrwWSInterestItemAdd?partNumber="+item+"&langId=-27&storeId=19&listId=260547049&quantity="+quan
-    with open('somefile', 'rb') as f:
+    with open('./somefile', 'rb') as f:
         cookies = requests.utils.cookiejar_from_dict(pickle.load(f))
     r1 = session.get(add_to_list, cookies=cookies)
     res = r1.text.find("<msg>OK</msg>")
