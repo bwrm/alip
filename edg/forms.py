@@ -4,7 +4,7 @@ from .models import Order
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ('name', 'email', 'phone', 'price', 'is_paid')
+        fields = ('name', 'email', 'phone', 'price', 'is_paid', 'articles')
         widgets = {
             # 'designer_price':forms.NumberInput(attrs={'min':'0'}),
             # 'category': forms.ChoiceField(attrs={'class': 'input-xlarge'}),

@@ -49,24 +49,27 @@
             </form>
             <form id="invoce_form" method="post">
                 <label>Costumer's name</label>
-                <input type="text" name="name" required id="order">
+                <input type="text" name="name" required id="order" value="{{ fields_data.name }}">
                 <label>Costumer's email</label>
-                <input type="email" name="email" required>
+                <input type="email" name="email" required value="{{ fields_data.email }}">
                 <label>Costumer's phone</label>
-                <input type="text" name="phone" required><br>
+                <input type="text" name="phone" required value="{{ fields_data.phone }}"><br>
                 <label>Paid</label>
-                <input id="id_is_paid" name="is_paid" type="checkbox"><br>
+                <input id="id_is_paid" name="is_paid" type="checkbox" value="{{ fields_data.is_paid }}"><br>
                 <label>Final price</label>
-                <input name="price" id="id_price" step="0.01" required="" type="number">
+                <input name="price" id="id_price" step="0.01" required="" type="number" value="{{ fields_data.price }}">
+                <input type="hidden" name="articles" value="{{ fields_data.articles }}" id="hidden_articles">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-default" formaction="{% url "edg:invoce" %}">Create invoce <i class="glyphicon glyphicon-list-alt"></i></button>
+                <button type="submit" class="btn btn-default" formaction="{% url "edg:invoce" %}" id="save_btn">Create invoce <i class="glyphicon glyphicon-list-alt"></i></button>
             </form>
+
         </div>
+
 <div class="col-sm-9">
 
 <form action="{% url 'edg:parcer' %}">
     <label>Enter articles here. Ex: 70193321</label>
-<textarea name="articles" style="width: 100%; height: 250px;" required="required">{% for a in articles %}{{ a }}&#13;{% endfor %}</textarea>
+<textarea id="textarea_art" name="articles" style="width: 100%; height: 250px;" required="required">{% for a in articles %}{{ a }}&#13;{% endfor %}{{ fields_data.articles }}</textarea>
     <br>
 <button type="submit" class="btn btn-primary pull-right" id="button-get-data" style="width: 100%">Get data</button>
 </form>
@@ -140,7 +143,7 @@ $(window).bind('load', function(){
         sum=Math.round(sum*100)/100;
         // here, you have your sum
     $('#result').text(sum);
-    $('#input-amount').val(sum);
+    $('#id_price').val(sum);
 });
     $(".btn-danger").click(function () {
     var fileName=$(this).attr('name');
@@ -152,6 +155,10 @@ $(window).bind('load', function(){
   });
 
      </script>
-
+    <script>
+        $("#invoce_form").submit(function() {
+  $("#hidden_articles").val($("#textarea_art").val());
+});
+    </script>
 </div>
 {% endblock %}

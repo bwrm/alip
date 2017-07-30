@@ -1,8 +1,7 @@
 from django.shortcuts import render,redirect, get_object_or_404, HttpResponse
 from django.views.generic.base import TemplateView, ContextMixin, View, TemplateResponseMixin
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
 import requests
 from django.http import HttpResponse
 from bs4 import BeautifulSoup
@@ -37,6 +36,7 @@ class ParcerView(CreateView):
     template_name = 'edg/parcer.html'
     model = Order
     form_class = OrderForm
+    object = None
 
     def clean_digits(self, value):
         value = value.replace(',', '.')
@@ -66,20 +66,6 @@ class ParcerView(CreateView):
         except:
             value = 'No item'
         return value
-
-
-    # def form_valid(self, form):
-    #     self.object = form.save(commit=False)
-    #     self.object.designer = self.request.user
-    #     self.object.slug = slugify(unidecode(self.request.POST.get('name')))
-    #     self.object.available = True
-    #     myuserobj = User.objects.get(email=self.request.user)
-    #     myuserobj.is_designer = True
-    #     myuserobj.save()
-    #     self.object.save()
-    #     self.ind = Product.objects.get(slug=self.object.slug, designer=self.object.designer)
-    #     self.request.session['prod_id'] = self.ind.id
-    #     return super(ProductCreate, self).form_valid(form)
 
     #this method search stock available on set country LT or PL
     def find_available(self, art, country):
@@ -145,7 +131,7 @@ def invoce_view(request):
     # Create the HttpResponse object with the appropriate PDF headers.
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; ' \
-                                      'filename="somefilename.pdf"'
+                                      'filename="invoce.pdf"'
 
     # Create the PDF object, using the response object as its "file."
     name = request.POST.get('name', None)
@@ -242,11 +228,12 @@ def OrderAjax(request):
     res_list = list(new_dlist)
     return JsonResponse(a, safe=False)
 
-class OrderDetail(DetailView):
+class OrderDetail(UpdateView):
     template_name = 'edg/parcer.html'
+    form_class = OrderForm
+    context_object_name = 'fields_data'
     model = Order
 
     def get_context_data(self, **kwargs):
         context = super(OrderDetail, self).get_context_data(**kwargs)
-        context['articles'] = ['70193321', '70193322']
         return context
