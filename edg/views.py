@@ -177,7 +177,7 @@ def is_login(session):
     # loggin_check_url = "http://www.ikea.com/webapp/wcs/stores/servlet/GetUserInfo?storeId=23"
     loggin_check_url = "http://www.ikea.com/webapp/wcs/stores/servlet/GetUserInfo?storeId=19"
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-    my_file = os.path.join(THIS_FOLDER, 'somefile')
+    my_file = os.path.join(THIS_FOLDER, 'somefile.txt')
     with open(my_file, 'rb') as f:
         cookies = requests.utils.cookiejar_from_dict(pickle.load(f))
     resp1 = session.post(loggin_check_url, cookies=cookies)
@@ -192,7 +192,7 @@ def login(session):
     login_url_pl = "https://secure.ikea.com/webapp/wcs/stores/servlet/Logon?storeId=19&langId=-27&logonId=alby.sv%40ya.ru&logonPassword=shpeonka1&rememberMe=true&previousCommand=logon&identitySignature=03gsXdE%2BkCBiftGGgtQCJJkiwss%3D&isContactMethodPresent=true&URL=MyProfile&DM_PersistentCookieCreated=true"
     session.post(login_url_pl)
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-    my_file = os.path.join(THIS_FOLDER, 'somefile')
+    my_file = os.path.join(THIS_FOLDER, 'somefile.txt')
     with open(my_file, 'wb') as f:
         pickle.dump(requests.utils.dict_from_cookiejar(session.cookies), f)
     if is_login(session):
@@ -204,7 +204,7 @@ def add_to_list(session, item, quan=1):
     # add_to_list = "http://www.ikea.com/webapp/wcs/stores/servlet/IrwWSInterestItemAdd?partNumber="+item+"&langId=-27&storeId=19&listId=260857224&quantity="+quan
     add_to_list = "http://www.ikea.com/webapp/wcs/stores/servlet/IrwWSInterestItemAdd?partNumber="+item+"&langId=-27&storeId=19&listId=260547049&quantity="+quan
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-    my_file = os.path.join(THIS_FOLDER, 'somefile')
+    my_file = os.path.join(THIS_FOLDER, 'somefile.txt')
     with open(my_file, 'rb') as f:
         cookies = requests.utils.cookiejar_from_dict(pickle.load(f))
     r1 = session.get(add_to_list, cookies=cookies)
