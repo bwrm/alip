@@ -2,7 +2,6 @@ from django.contrib import admin
 from .models import Product, Category, Delivery, OurProfit
 from django.template.defaultfilters import slugify
 
-
 # class CategoryAdmin(admin.ModelAdmin):
 #     list_display = ['name', 'slug']
 #     prepopulated_fields = {'slug': ('name',)}
