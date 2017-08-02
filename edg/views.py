@@ -224,6 +224,7 @@ class ParcerView(CreateView, ParserI):
     model = Order
     form_class = OrderForm
     object = None
+    success_url = '/admin/edg/order/'
 
     def get_context_data(self, **kwargs):
         context = super(ParcerView, self).get_context_data(**kwargs)
@@ -239,6 +240,7 @@ class OrderDetail(UpdateView, ParserI):
     form_class = OrderForm
     context_object_name = 'fields_data'
     model = Order
+    success_url = '/admin/edg/order/'
 
     def get_context_data(self, **kwargs):
         context = super(OrderDetail, self).get_context_data(**kwargs)
