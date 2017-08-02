@@ -56,7 +56,7 @@
                 <input type="text" name="phone" required value="{{ fields_data.phone }}"><br>
                 <label>Paid</label>
                 <input id="id_is_paid" name="is_paid" type="checkbox" value="{{ fields_data.is_paid }}"><br>
-                <label>Final price</label>
+                <label>Saved Price: {{ fields_data.price }} Parsed price: </label>
                 <input name="price" id="id_price" step="0.01" required="" type="number" value="{{ fields_data.price }}">
                 <input type="hidden" name="articles" value="{{ fields_data.articles }}" id="hidden_articles">
                 {% csrf_token %}
