@@ -1,18 +1,33 @@
 {% extends "admin/base.html" %}
-{% if user == 'edg@gmail.com' %}
     {% block branding %}
-    {% endblock %}
+        {% if user.get_username == 'edg@gmail.com' %}
+        {% else %}
+        {{ block.super }}
+        {% endif %}
+        {% endblock %}
     {% block welcome-msg %}
+        {% if user.get_username == 'edg@gmail.com' %}
+        {% else %}
+        {{ block.super }}
+        {% endif %}
     {% endblock %}
     {% block userlinks %}
+        {% if user.get_username == 'edg@gmail.com' %}
+        {% else %}
+        {{ block.super }}
+        {% endif %}
     {% endblock %}
-    {% block nav-global %}{% endblock %}
+    {% block nav-global %}
+        {% if user.get_username == 'edg@gmail.com' %}
+        {% else %}
+        {{ block.super }}
+        {% endif %}
+    {% endblock %}
 
     <!-- END Header -->
-    {% block breadcrumbs %}
-    {% endblock %}
 
     {% block content_title %}
+        {% if user.get_username == 'edg@gmail.com' %}
         <style>
         .head1 {
             font-size: 20px;
@@ -31,9 +46,12 @@
 
             <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 <br>
-
+        {% else %}
+        {{ block.super }}
+        {% endif %}
     {% endblock %}
     {% block footer %}
+    {% if user.get_username == 'edg@gmail.com' %}
             <script>
     $('.breadcrumbs').remove();
     $('#header').remove();
@@ -49,6 +67,7 @@
   ga('send', 'pageview');
 
 </script>
+        {% else %}
+        {{ block.super }}
+        {% endif %}
     {% endblock %}
-
-{% endif %}

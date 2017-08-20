@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^review/', include('review.urls', namespace='review')),
     url(r'', include('upload.urls', namespace='upload')),
     url(r'^edg/', include('edg.urls', namespace='edg')),
+    url(r'^sofa/', include('sofa.urls', namespace='sofa')),
 
 ]
 

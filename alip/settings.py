@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'categories',
     'categories.editor',
     'edg',
+    'sofa',
 ]
 
 MIDDLEWARE = [

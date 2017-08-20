@@ -6,7 +6,7 @@ fs.readdir('./', function (err, list) {
         console.log(err);
         return;
     }
-    var content = fs.readFileSync('../index.html.conf').toString(),
+    var content = fs.readFileSync('../sofa.conf').toString(),
         html = [];
 
     list.sort().forEach(function (file) {
@@ -21,5 +21,5 @@ fs.readdir('./', function (err, list) {
             }
         }
     });
-    fs.writeFileSync('../index.html', content.replace('@@list@@', html.join('\n')));
+    fs.writeFileSync('../sofa', content.replace('@@list@@', html.join('\n')));
 });
