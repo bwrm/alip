@@ -141,9 +141,13 @@
         // call the render function
 //        var step = 0;
 
-
+        // calculate arithmetic progression
+        // a1 - initial element
+        // n is the number of terms in the progression
+        // d is the common difference between terms
+        // initial dimension
         function getscale(a1, n, d){
-            return  (a1 + (n-1)*d);
+            return (a1 + (n-1)*d);
         }
 
         var a1 = 0; //first progression member
@@ -154,6 +158,8 @@
         var d3 = -315; //d for spinka and sidushka
         //vars for calculating position right podlokotnika to sidushka
         var d_sid_podl = 1175;
+        var width_spinka = 1182;
+        var width_podl = 115;
         var pos_sp = getscale(a1,scal_sp, d_sid_podl);
 
         // model from http://www.thingiverse.com/thing:69709
@@ -186,6 +192,7 @@
                 spinka = new THREE.Mesh(loadedMesh, mat);
                 spinka.scale.set(1, 1, scal_sp);
                 spinka.position.set(0, 0, getscale(a1, scal_sp, d3));
+                document.getElementById('somex').value = width_spinka;
                 scene.add(spinka);
             });
 //
@@ -212,10 +219,9 @@
                 scene.add(sid);
             });
 
-
         var controls = new function() {
-            this.width = 1;
-            this.height = 1;
+            this.width = 1182;
+            this.height = 115;
             this.depth = 1;
             this.height_sp = 1;
 
@@ -226,9 +232,9 @@
                     console.log(geometry);
                     scene.remove(podl_prav);
                     var mat = new THREE.MeshLambertMaterial({color: 0x7777ff});
-                    var pos_podl = getscale(a1,controls.width, d_sid_podl) + getscale(a1, controls.height, d);
+                    var pos_podl = getscale(a1,controls.width/width_spinka, d_sid_podl) + getscale(a1, controls.height/width_podl, d);
                     podl_prav = new THREE.Mesh(geometry, mat);
-                    podl_prav.scale.set(1, controls.depth, controls.height);
+                    podl_prav.scale.set(1, controls.depth, controls.height/width_podl);
                     podl_prav.position.set(0, 0, pos_podl);
                     scene.add(podl_prav);
                 });
@@ -238,19 +244,19 @@
                     scene.remove(podl_lev);
                     var mat = new THREE.MeshLambertMaterial({color: 0x7777ff});
                     podl_lev = new THREE.Mesh(geometry, mat);
-                    podl_lev.scale.set(1, controls.depth, controls.height);
-                    podl_lev.position.set(0, 0, getscale(a1, controls.height, d2));
+                    podl_lev.scale.set(1, controls.depth, controls.height/width_podl);
+                    podl_lev.position.set(0, 0, getscale(a1, controls.height/width_podl, d2));
                     scene.add(podl_lev);
                 });
-                var scal_spsid = getscale(a1, controls.width, d3);
+                var scal_spsid = getscale(a1, controls.width/width_spinka, d3);
                 loader.load("{% static "sofa/obj/spinka.stl" %}", function (loadedMesh) {
                     console.log(loadedMesh);
                     scene.remove(spinka);
                     var mat = new THREE.MeshLambertMaterial({color: 0x7777ff});
                     spinka = new THREE.Mesh(loadedMesh, mat);
-                    spinka.scale.set(1, controls.height_sp, controls.width);
+                    spinka.scale.set(1, controls.height_sp, controls.width/width_spinka);
                     spinka.position.set(0, 0, scal_spsid);
-                    document.getElementById('somex').value = spinka.scale.z;
+                    document.getElementById('somex').value = Math.round(controls.width);
                     scene.add(spinka);
 
                 });
@@ -260,11 +266,10 @@
                     scene.remove(sid);
                     var mat = new THREE.MeshLambertMaterial({color: 0x7777ff});
                     sid= new THREE.Mesh(geometry, mat);
-                    sid.scale.set(1, controls.depth, controls.width);
+                    sid.scale.set(1, controls.depth, controls.width/width_spinka);
                     sid.position.set(0, 0, scal_spsid);
                     scene.add(sid);
                 });
-            $('#width-sp').value = 1;
             };
         };
         var step = 0;
@@ -273,11 +278,11 @@
         var obj = { add:function(){ console.log("clicked") }};
 //        gui.add(obj, 'add').name('<input type="submit" formaction="users_data">');
         var f1 = gui.addFolder('Sidene');
-        f1.add(controls, 'width', 0.2, 3).onChange(controls.redraw);
+        f1.add(controls, 'width', 600, 3000).step(50).onChange(controls.redraw);
         f1.add(controls, 'height_sp', 0.2, 3).name('Height spin').onChange(controls.redraw);
 
         var f2 = gui.addFolder('Podlokotnoki');
-        f2.add(controls, 'height', 0.2, 3).onChange(controls.redraw);
+        f2.add(controls, 'height', 50, 300).name('Handle width').onChange(controls.redraw);
         f2.add(controls, 'depth', 0.2, 3).onChange(controls.redraw);
 
         var f3 = gui.addFolder('Material');

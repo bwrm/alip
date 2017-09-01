@@ -40,7 +40,7 @@ class ParserI(View):
         avail_pl = []
         if art:
             art = art.split('\r\n')
-            art = [e for e in art if e]
+            art = [e.replace('.','').replace(' ', '') for e in art if e]
             for a in art:
                 page_lt = self.get_page(a, 'lt')
                 page_pl = self.get_page(a, 'pl')
