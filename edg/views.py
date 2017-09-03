@@ -16,7 +16,7 @@ from django.http import JsonResponse
 from .models import Order
 from .forms import OrderForm
 import json
-import os
+import os, time
 from decimal import Decimal
 
 
@@ -51,7 +51,7 @@ class ParserI(View):
                 article.append(a)
                 avail_lt.append(self.find_available(a, 'lt'))
                 avail_pl.append(self.find_available(a, 'pl'))
-
+                time.sleep(0.5)
         return zip(name, type, price2, avail_lt, price3, avail_pl, article)
 
     def clean_digits(self, value):
