@@ -16,8 +16,13 @@ from django.http import JsonResponse
 from .models import Order
 from .forms import OrderForm
 import json
-import os, time
+import os, time, re
 from decimal import Decimal
+
+# searching weigth and height packadge
+# (pkgInfo":\[).+(\])
+# (consumerPackNo":).+?(\,)
+# (?:weightMet":).+?(?:\,)
 
 
 class DelLetter:
@@ -33,11 +38,13 @@ class ParserI(View):
     def get_data(self, art):
         name = []
         type = []
+        charact = []
         price2 = []
         price3 = []
         article = []
         avail_lt = []
         avail_pl = []
+        ppp = "shoppingList"
         if art:
             art = art.split('\r\n')
             art = [e.replace('.','').replace(' ', '') for e in art if e]
@@ -46,13 +53,17 @@ class ParserI(View):
                 page_pl = self.get_page(a, 'pl')
                 name.append(self.find_price(page_lt, 'name', True))
                 type.append(self.find_price(page_lt, 'type', True))
+                try:
+                    charact.append(re.search(r'(?:pkgInfo":).+?(?:\"\}\])', page_lt.text).group().replace('"', "").replace('pkgInfo:[{',"").replace('}]', "").replace(",","\r\n"))
+                except:
+                    pass
                 price2.append(self.find_price(page_lt, 'price1'))
                 price3.append(self.find_price(page_pl, 'price1'))
                 article.append(a)
                 avail_lt.append(self.find_available(a, 'lt'))
                 avail_pl.append(self.find_available(a, 'pl'))
                 time.sleep(0.5)
-        return zip(name, type, price2, avail_lt, price3, avail_pl, article)
+        return zip(name, type, price2, avail_lt, price3, avail_pl, article, charact)
 
     def clean_digits(self, value):
         value = value.replace(',', '.')
@@ -115,37 +126,37 @@ class ParserI(View):
             ans = 'No item'
         return ans
 
-def invoce_view(request):
-    # Create the HttpResponse object with the appropriate PDF headers.
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; ' \
-                                      'filename="invoce.pdf"'
-
-    # Create the PDF object, using the response object as its "file."
-    name = request.POST.get('name', None)
-    email = request.POST.get('email', None)
-    phone = request.POST.get('phone', None)
-    amount = request.POST.get('price', None)
-
-    p = canvas.Canvas(response)
-    p.setLineWidth(.3)
-    p.setFont('Helvetica', 12)
-    p.drawString(30, 750, 'OFFICIAL COMMUNIQUE')
-    p.drawString(30, 735, name)
-    p.drawString(500, 750, email)
-    p.drawString(600, 750, phone)
-    p.line(480, 747, 580, 747)
-    p.drawString(275, 725, 'AMOUNT OWED:')
-    p.drawString(500, 725, amount+" EUR")
-    p.line(378, 723, 580, 723)
-
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
-    p.save()
-    return response
+# def invoce_view(request):
+#     # Create the HttpResponse object with the appropriate PDF headers.
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; ' \
+#                                       'filename="invoce.pdf"'
+#
+#     # Create the PDF object, using the response object as its "file."
+#     name = request.POST.get('name', None)
+#     email = request.POST.get('email', None)
+#     phone = request.POST.get('phone', None)
+#     amount = request.POST.get('price', None)
+#
+#     p = canvas.Canvas(response)
+#     p.setLineWidth(.3)
+#     p.setFont('Helvetica', 12)
+#     p.drawString(30, 750, 'OFFICIAL COMMUNIQUE')
+#     p.drawString(30, 735, name)
+#     p.drawString(500, 750, email)
+#     p.drawString(600, 750, phone)
+#     p.line(480, 747, 580, 747)
+#     p.drawString(275, 725, 'AMOUNT OWED:')
+#     p.drawString(500, 725, amount+" EUR")
+#     p.line(378, 723, 580, 723)
+#
+#     # Draw things on the PDF. Here's where the PDF generation happens.
+#     # See the ReportLab documentation for the full list of functionality.
+#
+#     # Close the PDF object cleanly, and we're done.
+#     p.showPage()
+#     p.save()
+#     return response
 
 def is_login(session):
     # loggin_check_url = "http://www.ikea.com/webapp/wcs/stores/servlet/GetUserInfo?storeId=23"
@@ -174,9 +185,9 @@ def login(session):
     else:
         return False
 
-def add_to_list(session, item, quan=1):
+def add_to_list(session, item, listid, quan=1):
     # add_to_list = "http://www.ikea.com/webapp/wcs/stores/servlet/IrwWSInterestItemAdd?partNumber="+item+"&langId=-27&storeId=19&listId=260857224&quantity="+quan
-    add_to_list = "http://www.ikea.com/webapp/wcs/stores/servlet/IrwWSInterestItemAdd?partNumber="+item+"&langId=-27&storeId=19&listId=260547049&quantity="+quan
+    add_to_list = "http://www.ikea.com/webapp/wcs/stores/servlet/IrwWSInterestItemAdd?partNumber="+item+"&langId=-27&storeId=19&listId="+listid+"&quantity="+quan
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
     my_file = os.path.join(THIS_FOLDER, 'somefile.txt')
     with open(my_file, 'rb') as f:
@@ -192,14 +203,15 @@ def add_to_shopping_list_view(request):
     # "127.0.0.1:8000/edg/add-to-list/?quantity=9&item=00316392"
     quan = request.GET.get('quantity', None)
     item = request.GET.get('item', None)
+    listid = request.GET.get('listid', None)
     session = requests.Session()
     if is_login(session):
-        if add_to_list(session, item, quan):
+        if add_to_list(session, item, listid, quan):
             res = {'success': True}
         else:
             res = {'success': False}
     elif login(session):
-        if add_to_list(session, item, quan):
+        if add_to_list(session, item, listid, quan):
             res = {'success': True}
         else:
             res = {'success': False}
