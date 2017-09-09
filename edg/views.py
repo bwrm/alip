@@ -163,10 +163,13 @@ def is_login(session):
     loggin_check_url = "http://www.ikea.com/webapp/wcs/stores/servlet/GetUserInfo?storeId=19"
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
     my_file = os.path.join(THIS_FOLDER, 'somefile.txt')
-    with open(my_file, 'rb') as f:
-        cookies = requests.utils.cookiejar_from_dict(pickle.load(f))
-    resp1 = session.post(loggin_check_url, cookies=cookies)
-    res = resp1.text.find(">Y</")
+    try:
+        with open(my_file, 'rb') as f:
+            cookies = requests.utils.cookiejar_from_dict(pickle.load(f))
+        resp1 = session.post(loggin_check_url, cookies=cookies)
+        res = resp1.text.find(">Y</")
+    except:
+        return False
     if res == -1:
         return False
     else:
